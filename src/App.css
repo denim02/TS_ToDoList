@@ -6,5 +6,8 @@
 }
 
 .card {
-  padding: 2em;
+  padding: 2rem 3rem;
+  box-shadow: rgba(255, 255, 255, 0.364) 0px 3px 8px;
+  border-radius: 20px;
+  background-color: var(--card-background);
 }
