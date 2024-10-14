@@ -1,8 +1,14 @@
 import PropTypes from "prop-types";
 
 const Button = ({ label, handleClick, ...rest }) => {
+  const { className, ...otherProps } = rest;
+
   return (
-    <button onClick={handleClick} {...rest}>
+    <button
+      onClick={handleClick}
+      className={`base-button ${className}`}
+      {...otherProps}
+    >
       {label}
     </button>
   );

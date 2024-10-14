@@ -1,13 +1,155 @@
 #root {
+  display: flex;
+  justify-content: center;
   max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
 
+.base-button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #ff7d00;
+  color: white;
+  transition: all 0.25s;
+}
+
+.base-button:hover {
+  background-color: #ff3700;
+  border: 1px solid #851a09;
+}
+
+.base-button:focus,
+.base-button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
 .card {
   padding: 2rem 3rem;
-  box-shadow: rgba(255, 255, 255, 0.364) 0px 3px 8px;
+  width: 60%;
+  box-shadow: rgba(233, 160, 160, 0.364) 0px 3px 8px;
   border-radius: 20px;
   background-color: var(--card-background);
+}
+
+.input-field {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex: 1;
+}
+
+.input-field > input {
+  padding: 1rem;
+  border-radius: 10px;
+  flex: 1;
+}
+
+#add-to-do-form {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+}
+
+.editable-textbox {
+  appearance: none !important;
+  font-family: inherit;
+  font-weight: inherit;
+  color: inherit;
+  background-color: inherit;
+  border: none;
+  overflow: auto;
+  outline: none;
+  box-shadow: none;
+  resize: none;
+}
+
+.editable-textbox.editable {
+  background-color: white;
+  color: black;
+}
+
+.icon-button {
+  padding: 0;
+  background-color: inherit;
+  border: none;
+}
+
+.icon-styles {
+  width: 25px;
+  height: auto;
+}
+
+.todo-list {
+  display: grid;
+  row-gap: 30px;
+  margin: 2rem 1rem 0 1rem;
+  padding: 1rem;
+}
+
+.todo-card {
+  background-color: #c14616;
+  border-radius: 20px;
+  box-shadow: 0px 3px 8px #f179497d;
+  padding: 1rem 2rem;
+}
+
+.todo-header {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+
+.todo-header > h3,
+.todo-header > p {
+  margin: 0;
+}
+
+.todo-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.2rem;
+}
+
+.todo-text {
+  flex: 1;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.todo-text:not(:read-only) {
+  background-color: black;
+  color: white;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.todo-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.save-button,
+.remove-button,
+.edit-button {
+  fill: white;
+  transition: fill 0.2s ease;
+}
+
+.save-button:hover {
+  fill: lightgreen;
+}
+
+.remove-button:hover {
+  fill: rgb(42, 13, 10);
+}
+
+.edit-button:hover {
+  fill: orange;
 }
