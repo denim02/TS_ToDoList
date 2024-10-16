@@ -30,7 +30,7 @@ const EditableTextbox = ({
       readOnly={!isEditable}
       value={value}
       onChange={handleTextboxChange}
-      rows={3}
+      ref={textAreaRef}
       {...otherProps}
     ></textarea>
   );

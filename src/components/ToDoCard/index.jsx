@@ -5,35 +5,40 @@ import { useState } from "react";
 import SaveButton from "./SaveButton";
 import EditButton from "./EditButton";
 
-const dateFormatOptions = {
-  weekday: "long",
-  year: "numeric",
-  month: "short",
-  day: "numeric",
-};
-
 const ToDoCard = ({ todo, handleRemoveTodo, handleEditTodo }) => {
-  const [todoContent, setTodoContent] = useState(todo.text);
+  const [todoContent, setTodoContent] = useState(todo.description);
   const [isContentEditable, setIsContentEditable] = useState(false);
 
   const handleStartEdit = () => setIsContentEditable(true);
   const handleFinishEdit = () => {
     if (!todoContent.trim()) alert("The content of a task cannot be empty!");
     else {
-      handleEditTodo(todo.id, todoContent);
+      todo.description = todoContent;
+      handleEditTodo(todo);
       setIsContentEditable(false);
     }
   };
 
+  const handleToggleCompleted = () => {
+    todo.completed = !todo.completed;
+    handleEditTodo(todo);
+  };
+
   return (
-    <div className="todo-card">
+    <div className={`todo-card ${todo.completed && "completed"}`}>
       <div className="todo-header">
-        <h3>Task #{todo.id}</h3>
-        <p>{todo.createdAt.toLocaleDateString("en-uk", dateFormatOptions)}</p>
+        <div>
+          <h4>Task #{todo.id}</h4>
+          <h3>{todo.title}</h3>
+        </div>
+        <input
+          type="checkbox"
+          onChange={handleToggleCompleted}
+          name="isCompleted"
+          checked={todo.completed}
+        />
       </div>
-
       <hr />
-
       <div className="todo-content">
         <EditableTextbox
           isEditable={isContentEditable}
@@ -57,8 +62,9 @@ const ToDoCard = ({ todo, handleRemoveTodo, handleEditTodo }) => {
 ToDoCard.propTypes = {
   todo: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    text: PropTypes.string.isRequired,
-    createdAt: PropTypes.instanceOf(Date),
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
   }).isRequired,
   handleRemoveTodo: PropTypes.func.isRequired,
   handleEditTodo: PropTypes.func.isRequired,
