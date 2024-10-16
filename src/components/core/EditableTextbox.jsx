@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { useRef } from "react";
 
 const EditableTextbox = ({
   name,
@@ -8,6 +9,17 @@ const EditableTextbox = ({
   ...rest
 }) => {
   const { className, ...otherProps } = rest;
+  const textAreaRef = useRef(null);
+
+  const adjustHeight = () => {
+    textAreaRef.current.style.height = "inherit";
+    textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+  };
+
+  const handleTextboxChange = (event) => {
+    adjustHeight();
+    handleChange(event);
+  };
 
   return (
     <textarea
@@ -17,7 +29,7 @@ const EditableTextbox = ({
       name={name}
       readOnly={!isEditable}
       value={value}
-      onChange={handleChange}
+      onChange={handleTextboxChange}
       rows={3}
       {...otherProps}
     ></textarea>
