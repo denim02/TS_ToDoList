@@ -10,6 +10,7 @@ function App() {
     todos,
     isFetchingData,
     error,
+    todoStats,
     getTodos,
     createTodo,
     updateTodo,
@@ -24,19 +25,26 @@ function App() {
     <Card>
       <h1>To-Do Project</h1>
       <AddToDoForm handleAddTodo={createTodo} />
-      <div className="todo-list">
-        {isFetchingData && <p>Loading data...</p>}
-        {error && <p>Error: {error}</p>}
-        {todos &&
-          todos.map((todo) => (
-            <ToDoCard
-              key={todo.id}
-              todo={todo}
-              handleEditTodo={updateTodo}
-              handleRemoveTodo={deleteTodo}
-            />
-          ))}
-      </div>
+      {isFetchingData && <p>Loading data...</p>}
+      {error && <p>Error: {error}</p>}
+      {todos && (
+        <>
+          <div className="todo-list-stats">
+            <h4>Completed: {todoStats.completed}</h4>
+            <h4>Remaining: {todoStats.remaining}</h4>
+          </div>
+          <div className="todo-list">
+            {todos.map((todo) => (
+              <ToDoCard
+                key={todo.id}
+                todo={todo}
+                handleEditTodo={updateTodo}
+                handleRemoveTodo={deleteTodo}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </Card>
   );
 }

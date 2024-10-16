@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -92,11 +92,24 @@ export const useTodos = () => {
     }
   }, []);
 
+  const todoCompletedCount = useMemo(() => {
+    return todos.filter((todo) => todo.completed).length;
+  }, [todos]);
+
+  const todoStats = useMemo(() => {
+    console.log("Re-evaluating stats!");
+    return {
+      completed: todoCompletedCount,
+      remaining: todos.length - todoCompletedCount,
+    };
+  }, [todoCompletedCount, todos.length]);
+
   return {
     todos,
     isFetchingData,
     isCrudProcessing,
     error,
+    todoStats,
     getTodos,
     createTodo,
     updateTodo,
