@@ -1,6 +1,10 @@
 import PropTypes from "prop-types";
+import React from "react";
 
-const InputField = ({ name, value, label, handleChange, id, ...rest }) => {
+const InputField = React.forwardRef(function InputField(
+  { name, value, label, handleChange, id, ...rest },
+  ref
+) {
   return (
     <div className="input-field">
       <label htmlFor={name}>{label}</label>
@@ -9,11 +13,12 @@ const InputField = ({ name, value, label, handleChange, id, ...rest }) => {
         id={id ?? name}
         value={value}
         onChange={handleChange}
+        ref={ref}
         {...rest}
       />
     </div>
   );
-};
+});
 
 InputField.propTypes = {
   name: PropTypes.string.isRequired,

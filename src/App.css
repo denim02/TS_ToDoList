@@ -119,10 +119,14 @@
   margin: 1rem 0;
 }
 
-.todo-header h3,
 .todo-header h4,
 .todo-header p {
   margin: 0;
+}
+
+.todo-header .todo-title {
+  margin: 0;
+  padding: 0;
 }
 
 .todo-header input[type="checkbox"] {
@@ -141,13 +145,22 @@
   gap: 1.2rem;
 }
 
-.todo-text {
+.todo-text,
+.todo-title {
   flex: 1;
-  font-size: 1rem;
   transition: all 0.2s ease;
 }
 
-.todo-text:not(:read-only) {
+.todo-title {
+  font-size: 1.1rem;
+}
+
+.todo-text {
+  font-size: 1rem;
+}
+
+.todo-text:not(:read-only),
+.todo-title:not(:read-only) {
   background-color: black;
   color: white;
   border-radius: 10px;

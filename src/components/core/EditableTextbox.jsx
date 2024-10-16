@@ -1,15 +1,14 @@
 import PropTypes from "prop-types";
-import { useRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 
-const EditableTextbox = ({
-  name,
-  value,
-  isEditable,
-  handleChange,
-  ...rest
-}) => {
+const EditableTextbox = forwardRef(function EditableTextbox(
+  { name, value, isEditable, shouldAutoresize, handleChange, ...rest },
+  outerRef
+) {
   const { className, ...otherProps } = rest;
   const textAreaRef = useRef(null);
+
+  useImperativeHandle(outerRef, () => textAreaRef.current, []);
 
   const adjustHeight = () => {
     textAreaRef.current.style.height = "inherit";
@@ -17,9 +16,13 @@ const EditableTextbox = ({
   };
 
   const handleTextboxChange = (event) => {
-    adjustHeight();
+    if (shouldAutoresize) adjustHeight();
     handleChange(event);
   };
+
+  useEffect(() => {
+    if (shouldAutoresize) adjustHeight();
+  }, [shouldAutoresize]);
 
   return (
     <textarea
@@ -34,11 +37,12 @@ const EditableTextbox = ({
       {...otherProps}
     ></textarea>
   );
-};
+});
 
 EditableTextbox.propTypes = {
   name: PropTypes.string,
   isEditable: PropTypes.bool,
+  shouldAutoresize: PropTypes.bool,
   value: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
 };

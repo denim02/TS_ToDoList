@@ -1,20 +1,19 @@
-import { useState } from "react";
 import InputField from "./core/InputField";
 import PropTypes from "prop-types";
 import Button from "./core/Button";
+import { useInput } from "../hooks/use-input";
 
 const AddToDoForm = ({ handleAddTodo }) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const titleInput = useInput();
+  const descriptionInput = useInput();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (!title.trim()) alert("A new to-do must contain a title!");
-    else if (!description.trim())
-      alert("A new to-do must contain a description!");
-    else {
-      handleAddTodo(title.trim(), description.trim());
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleAddTodo(titleInput.value, descriptionInput.value);
+
+    // Reset form
+    titleInput.clearInput();
+    descriptionInput.clearInput();
   };
 
   return (
@@ -24,15 +23,19 @@ const AddToDoForm = ({ handleAddTodo }) => {
           name="title"
           label="Title:"
           placeholder="Enter a title..."
-          value={title}
-          handleChange={(e) => setTitle(e.target.value)}
+          value={titleInput.value}
+          required
+          handleChange={titleInput.handleChange}
+          ref={titleInput.ref}
         />
         <InputField
           name="description"
-          label="Description"
+          label="Description:"
           placeholder="Enter anything..."
-          value={description}
-          handleChange={(e) => setDescription(e.target.value)}
+          value={descriptionInput.value}
+          required
+          handleChange={descriptionInput.handleChange}
+          ref={descriptionInput.ref}
         />
       </div>
       <Button type="submit" label="Add" />

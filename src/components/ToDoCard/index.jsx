@@ -4,19 +4,19 @@ import EditableTextbox from "../core/EditableTextbox";
 import { useState } from "react";
 import SaveButton from "./SaveButton";
 import EditButton from "./EditButton";
+import { useInput } from "../../hooks/use-input";
 
 const ToDoCard = ({ todo, handleRemoveTodo, handleEditTodo }) => {
-  const [todoContent, setTodoContent] = useState(todo.description);
+  const titleInput = useInput(todo.title);
+  const descriptionInput = useInput(todo.description);
   const [isContentEditable, setIsContentEditable] = useState(false);
 
   const handleStartEdit = () => setIsContentEditable(true);
   const handleFinishEdit = () => {
-    if (!todoContent.trim()) alert("The content of a task cannot be empty!");
-    else {
-      todo.description = todoContent;
-      handleEditTodo(todo);
-      setIsContentEditable(false);
-    }
+    todo.title = titleInput.value;
+    todo.description = descriptionInput.value;
+    handleEditTodo(todo);
+    setIsContentEditable(false);
   };
 
   const handleToggleCompleted = () => {
@@ -29,7 +29,14 @@ const ToDoCard = ({ todo, handleRemoveTodo, handleEditTodo }) => {
       <div className="todo-header">
         <div>
           <h4>Task #{todo.id}</h4>
-          <h3>{todo.title}</h3>
+          <EditableTextbox
+            isEditable={isContentEditable}
+            value={titleInput.value}
+            className="todo-title"
+            shouldAutoresize={true}
+            handleChange={titleInput.handleChange}
+            ref={titleInput.ref}
+          />
         </div>
         <input
           type="checkbox"
@@ -42,9 +49,11 @@ const ToDoCard = ({ todo, handleRemoveTodo, handleEditTodo }) => {
       <div className="todo-content">
         <EditableTextbox
           isEditable={isContentEditable}
-          value={todoContent}
+          value={descriptionInput.value}
           className="todo-text"
-          handleChange={(e) => setTodoContent(e.target.value)}
+          shouldAutoresize={true}
+          handleChange={descriptionInput.handleChange}
+          ref={descriptionInput.ref}
         />
         <div className="todo-actions">
           {isContentEditable ? (
