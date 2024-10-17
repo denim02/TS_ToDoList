@@ -13,15 +13,19 @@ const ToDoCard = ({ todo, handleRemoveTodo, handleEditTodo }) => {
 
   const handleStartEdit = () => setIsContentEditable(true);
   const handleFinishEdit = () => {
-    todo.title = titleInput.value;
-    todo.description = descriptionInput.value;
-    handleEditTodo(todo);
+    handleEditTodo({
+      ...todo,
+      title: titleInput.value.trim(),
+      description: descriptionInput.value.trim(),
+    });
     setIsContentEditable(false);
   };
 
   const handleToggleCompleted = () => {
-    todo.completed = !todo.completed;
-    handleEditTodo(todo);
+    handleEditTodo({
+      ...todo,
+      completed: !todo.completed,
+    });
   };
 
   return (
