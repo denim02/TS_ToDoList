@@ -87,20 +87,11 @@ export const useTodos = () => {
 
   const updateTodo = useCallback(
     async (changedTodo) => {
-      const originalTodo = state.todos.find(
-        (todo) => todo.id === changedTodo.id
-      );
-      if (
-        changedTodo.title !== originalTodo.title ||
-        changedTodo.description !== originalTodo.description ||
-        changedTodo.completed !== originalTodo.completed
-      ) {
-        dispatch({ type: ACTION_TYPE.TOGGLE_API_LOADING });
-        const apiResponse = await api.patch(`/${changedTodo.id}`, changedTodo);
-        dispatch({ type: ACTION_TYPE.UPDATE_TODO, payload: apiResponse });
-      }
+      dispatch({ type: ACTION_TYPE.TOGGLE_API_LOADING });
+      const apiResponse = await api.patch(`/${changedTodo.id}`, changedTodo);
+      dispatch({ type: ACTION_TYPE.UPDATE_TODO, payload: apiResponse });
     },
-    [api, state.todos]
+    [api]
   );
 
   const deleteTodo = useCallback(

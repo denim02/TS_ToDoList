@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import DeleteButton from "./DeleteButton";
 import EditableTextbox from "../core/EditableTextbox";
-import { useState } from "react";
+import { useState, memo } from "react";
 import SaveButton from "./SaveButton";
 import EditButton from "./EditButton";
 import { useInput } from "../../hooks/use-input";
@@ -83,4 +83,4 @@ TodoItem.propTypes = {
   handleUpdateTodo: PropTypes.func.isRequired,
 };
 
-export default TodoItem;
+export default memo(TodoItem);

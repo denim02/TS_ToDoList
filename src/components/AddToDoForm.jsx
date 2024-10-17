@@ -2,6 +2,7 @@ import InputField from "./core/InputField";
 import PropTypes from "prop-types";
 import Button from "./core/Button";
 import { useInput } from "../hooks/use-input";
+import { memo } from "react";
 
 const AddTodoForm = ({ handleAddTodo }) => {
   const titleInput = useInput();
@@ -47,4 +48,4 @@ AddTodoForm.propTypes = {
   handleAddTodo: PropTypes.func.isRequired,
 };
 
-export default AddTodoForm;
+export default memo(AddTodoForm);

@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { IconContext } from "react-icons";
+import { memo } from "react";
 
 const IconButton = ({ icon: Icon, handleClick, ...rest }) => {
   const { className, ...otherProps } = rest;
@@ -18,4 +19,4 @@ IconButton.propTypes = {
   handleClick: PropTypes.func.isRequired,
 };
 
-export default IconButton;
+export default memo(IconButton);
