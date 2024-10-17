@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
 
 export const useApi = (baseUrl) => {
   const abortControllerRef = useRef(null);
@@ -62,11 +62,16 @@ export const useApi = (baseUrl) => {
     [sendRequest]
   );
 
-  return {
-    sendRequest,
-    get,
-    post,
-    patch,
-    del,
-  };
+  const api = useMemo(
+    () => ({
+      sendRequest,
+      get,
+      post,
+      patch,
+      del,
+    }),
+    [del, get, patch, post, sendRequest]
+  );
+
+  return api;
 };
