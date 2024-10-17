@@ -1,118 +1,141 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useReducer } from "react";
+import { useApi } from "./use-api";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
+const INITIAL_VALUES = {
+  todos: [],
+  isDataLoading: false,
+  isApiProcessing: false,
+  error: null,
+};
+
+const ACTION_TYPE = {
+  TOGGLE_API_LOADING: "TOGGLE_API_LOADING",
+  TOGGLE_DATA_LOADING: "TOGGLE_DATA_LOADING",
+  SET_TODOS: "SET_TODOS",
+  ADD_TODO: "ADD_TODO",
+  UPDATE_TODO: "UPDATE_TODO",
+  DELETE_TODO: "DELETE_TODO",
+};
+
+const todoReducer = (state, action) => {
+  switch (action.type) {
+    case ACTION_TYPE.TOGGLE_API_LOADING:
+      return { ...state, isApiProcessing: !state.isApiProcessing };
+    case ACTION_TYPE.TOGGLE_DATA_LOADING:
+      return { ...state, isDataLoading: !state.isDataLoading };
+    case ACTION_TYPE.SET_TODOS:
+      return {
+        ...state,
+        todos: action.payload.data ?? [],
+        error: action.payload.error,
+        isDataLoading: false,
+      };
+    case ACTION_TYPE.ADD_TODO:
+      return {
+        ...state,
+        todos: action.payload.data
+          ? [...state.todos, action.payload.data]
+          : [...state.todos],
+        error: action.payload.error,
+        isApiProcessing: false,
+      };
+    case ACTION_TYPE.UPDATE_TODO:
+      return {
+        ...state,
+        todos: action.payload.data
+          ? state.todos.map((todo) =>
+              todo.id === action.payload.data.id ? action.payload.data : todo
+            )
+          : [...state.todos],
+        error: action.payload.error,
+        isApiProcessing: false,
+      };
+    case ACTION_TYPE.DELETE_TODO:
+      return {
+        ...state,
+        todos: action.payload.error
+          ? [...state.todos]
+          : state.todos.filter((todo) => todo.id !== action.payload.id),
+        error: action.payload.error,
+        isApiProcessing: false,
+      };
+    default:
+      throw new Error(`Unexpected action type: ${action.type}`);
+  }
+};
+
 export const useTodos = () => {
-  const [todos, setTodos] = useState([]);
-  const [isFetchingData, setIsFetchingData] = useState(false);
-  const [isCrudProcessing, setIsCrudProcessing] = useState(false);
-  const [error, setError] = useState(null);
+  const [state, dispatch] = useReducer(todoReducer, INITIAL_VALUES);
+  const api = useApi(API_URL);
 
-  const getTodos = useCallback(async () => {
-    setIsFetchingData(true);
-    try {
-      const response = await fetch(API_URL, {
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok)
-        throw new Error("An issue occured while fetching the todos.");
-      const data = await response.json();
-      setTodos(data);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsFetchingData(false);
-    }
-  }, []);
+  const fetchTodos = useCallback(async () => {
+    dispatch({ type: ACTION_TYPE.TOGGLE_DATA_LOADING });
+    const apiResponse = await api.get();
+    dispatch({ type: ACTION_TYPE.SET_TODOS, payload: apiResponse });
+  }, [api]);
 
-  const createTodo = useCallback(async (title, description) => {
-    setIsCrudProcessing(true);
-    try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title,
-          description,
-        }),
-      });
-      if (!response.ok)
-        throw new Error("An issue occured while creating a todo.");
-      const newTodo = await response.json();
-      setTodos((prevTodos) => [...prevTodos, newTodo]);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsCrudProcessing(false);
-    }
-  }, []);
+  const createTodo = useCallback(
+    async (title, description) => {
+      dispatch({ type: ACTION_TYPE.TOGGLE_API_LOADING });
+      const apiResponse = await api.post("", { title, description });
+      dispatch({ type: ACTION_TYPE.ADD_TODO, payload: apiResponse });
+    },
+    [api]
+  );
 
-  const updateTodo = useCallback(async (changedTodo) => {
-    setIsCrudProcessing(true);
-    try {
-      const { id, ...otherProps } = changedTodo;
-      const response = await fetch(`${API_URL}/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(otherProps),
-      });
-      if (!response.ok)
-        throw new Error("An issue occured while updating a todo.");
-      const updatedTodo = await response.json();
-      setTodos((prevTodos) =>
-        prevTodos.map((todo) =>
-          todo.id === updatedTodo.id ? updatedTodo : todo
-        )
+  const updateTodo = useCallback(
+    async (changedTodo) => {
+      console.time("update");
+      const originalTodo = state.todos.find(
+        (todo) => todo.id === changedTodo.id
       );
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsCrudProcessing(false);
-    }
-  }, []);
+      console.log(changedTodo, originalTodo);
+      if (
+        changedTodo.title !== originalTodo.title ||
+        changedTodo.description !== originalTodo.description ||
+        changedTodo.completed !== originalTodo.completed
+      ) {
+        dispatch({ type: ACTION_TYPE.TOGGLE_API_LOADING });
+        const apiResponse = await api.patch(`/${changedTodo.id}`, changedTodo);
+        dispatch({ type: ACTION_TYPE.UPDATE_TODO, payload: apiResponse });
+      }
+      console.timeEnd("update");
+    },
+    [api, state.todos]
+  );
 
-  const deleteTodo = useCallback(async (id) => {
-    setIsCrudProcessing(true);
-    try {
-      const response = await fetch(`${API_URL}/${id}`, {
-        method: "DELETE",
+  const deleteTodo = useCallback(
+    async (id) => {
+      dispatch({ type: ACTION_TYPE.TOGGLE_API_LOADING });
+      const apiResponse = await api.del(`/${id}`);
+      dispatch({
+        type: ACTION_TYPE.DELETE_TODO,
+        payload: { id, error: apiResponse.error },
       });
-      if (!response.ok)
-        throw new Error("An issue occured while deleting a todo.");
-      setTodos((prevTodos) =>
-        prevTodos.toSpliced(
-          prevTodos.findIndex((todo) => todo.id === id),
-          1
-        )
-      );
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsCrudProcessing(false);
-    }
-  }, []);
+    },
+    [api]
+  );
 
   const todoCompletedCount = useMemo(() => {
-    return todos.filter((todo) => todo.completed).length;
-  }, [todos]);
+    return state.todos.filter((todo) => todo.completed).length;
+  }, [state.todos]);
 
   const todoStats = useMemo(() => {
     console.log("Re-evaluating stats!");
     return {
       completed: todoCompletedCount,
-      remaining: todos.length - todoCompletedCount,
+      remaining: state.todos.length - todoCompletedCount,
     };
-  }, [todoCompletedCount, todos.length]);
+  }, [state.todos.length, todoCompletedCount]);
 
   return {
-    todos,
-    isFetchingData,
-    isCrudProcessing,
-    error,
-    todoStats,
-    getTodos,
+    ...state,
+    fetchTodos,
     createTodo,
     updateTodo,
     deleteTodo,
+    todoStats,
   };
 };
