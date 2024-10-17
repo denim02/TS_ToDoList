@@ -87,11 +87,9 @@ export const useTodos = () => {
 
   const updateTodo = useCallback(
     async (changedTodo) => {
-      console.time("update");
       const originalTodo = state.todos.find(
         (todo) => todo.id === changedTodo.id
       );
-      console.log(changedTodo, originalTodo);
       if (
         changedTodo.title !== originalTodo.title ||
         changedTodo.description !== originalTodo.description ||
@@ -101,7 +99,6 @@ export const useTodos = () => {
         const apiResponse = await api.patch(`/${changedTodo.id}`, changedTodo);
         dispatch({ type: ACTION_TYPE.UPDATE_TODO, payload: apiResponse });
       }
-      console.timeEnd("update");
     },
     [api, state.todos]
   );
@@ -133,7 +130,7 @@ export const useTodos = () => {
   return {
     ...state,
     fetchTodos,
-    createTodo,
+    addTodo: createTodo,
     updateTodo,
     deleteTodo,
     todoStats,

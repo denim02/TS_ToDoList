@@ -2,18 +2,18 @@ import PropTypes from "prop-types";
 import IconButton from "../core/IconButton";
 import { FaTrash } from "react-icons/fa";
 
-const RemoveButton = ({ handleClick }) => {
+const DeleteButton = ({ handleClick }) => {
   return (
     <IconButton
       handleClick={handleClick}
       icon={FaTrash}
-      className="remove-button"
+      className="delete-button"
     />
   );
 };
 
-RemoveButton.propTypes = {
+DeleteButton.propTypes = {
   handleClick: PropTypes.func.isRequired,
 };
 
-export default RemoveButton;
+export default DeleteButton;

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Button from "./core/Button";
 import { useInput } from "../hooks/use-input";
 
-const AddToDoForm = ({ handleAddTodo }) => {
+const AddTodoForm = ({ handleAddTodo }) => {
   const titleInput = useInput();
   const descriptionInput = useInput();
 
@@ -43,8 +43,8 @@ const AddToDoForm = ({ handleAddTodo }) => {
   );
 };
 
-AddToDoForm.propTypes = {
+AddTodoForm.propTypes = {
   handleAddTodo: PropTypes.func.isRequired,
 };
 
-export default AddToDoForm;
+export default AddTodoForm;

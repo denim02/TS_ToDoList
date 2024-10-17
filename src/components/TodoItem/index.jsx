@@ -1,19 +1,19 @@
 import PropTypes from "prop-types";
-import RemoveButton from "./RemoveButton";
+import DeleteButton from "./DeleteButton";
 import EditableTextbox from "../core/EditableTextbox";
 import { useState } from "react";
 import SaveButton from "./SaveButton";
 import EditButton from "./EditButton";
 import { useInput } from "../../hooks/use-input";
 
-const ToDoCard = ({ todo, handleRemoveTodo, handleEditTodo }) => {
+const TodoItem = ({ todo, handleDeleteTodo, handleUpdateTodo }) => {
   const titleInput = useInput(todo.title);
   const descriptionInput = useInput(todo.description);
   const [isContentEditable, setIsContentEditable] = useState(false);
 
   const handleStartEdit = () => setIsContentEditable(true);
   const handleFinishEdit = () => {
-    handleEditTodo({
+    handleUpdateTodo({
       ...todo,
       title: titleInput.value.trim(),
       description: descriptionInput.value.trim(),
@@ -22,7 +22,7 @@ const ToDoCard = ({ todo, handleRemoveTodo, handleEditTodo }) => {
   };
 
   const handleToggleCompleted = () => {
-    handleEditTodo({
+    handleUpdateTodo({
       ...todo,
       completed: !todo.completed,
     });
@@ -65,22 +65,22 @@ const ToDoCard = ({ todo, handleRemoveTodo, handleEditTodo }) => {
           ) : (
             <EditButton handleClick={handleStartEdit} />
           )}
-          <RemoveButton handleClick={() => handleRemoveTodo(todo.id)} />
+          <DeleteButton handleClick={() => handleDeleteTodo(todo.id)} />
         </div>
       </div>
     </div>
   );
 };
 
-ToDoCard.propTypes = {
+TodoItem.propTypes = {
   todo: PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
   }).isRequired,
-  handleRemoveTodo: PropTypes.func.isRequired,
-  handleEditTodo: PropTypes.func.isRequired,
+  handleDeleteTodo: PropTypes.func.isRequired,
+  handleUpdateTodo: PropTypes.func.isRequired,
 };
 
-export default ToDoCard;
+export default TodoItem;
