@@ -8,24 +8,26 @@ import { useTodos } from "./hooks/use-todos";
 function App() {
   const {
     todos,
-    isFetchingData,
+    isDataLoading,
+    isApiProcessing,
     error,
     todoStats,
-    getTodos,
+    fetchTodos,
     createTodo,
     updateTodo,
     deleteTodo,
   } = useTodos();
 
   useEffect(() => {
-    getTodos();
-  }, [getTodos]);
+    fetchTodos();
+  }, [fetchTodos]);
 
   return (
     <Card>
       <h1>To-Do Project</h1>
       <AddToDoForm handleAddTodo={createTodo} />
-      {isFetchingData && <p>Loading data...</p>}
+      {isDataLoading && <p>Loading data...</p>}
+      {isApiProcessing && <p>Processing request...</p>}
       {error && <p>Error: {error}</p>}
       {todos && (
         <>
