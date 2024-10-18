@@ -131,9 +131,14 @@
   margin: 0;
 }
 
+.todo-header > div {
+  flex: 1;
+}
+
 .todo-header .todo-title {
   margin: 0;
   padding: 0;
+  width: 70%;
 }
 
 .todo-header input[type="checkbox"] {

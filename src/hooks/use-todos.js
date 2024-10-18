@@ -37,7 +37,7 @@ const todoReducer = (state, action) => {
         ...state,
         todos: action.payload.data
           ? [...state.todos, action.payload.data]
-          : [...state.todos],
+          : state.todos,
         error: action.payload.error,
         isApiProcessing: false,
       };
@@ -48,7 +48,7 @@ const todoReducer = (state, action) => {
           ? state.todos.map((todo) =>
               todo.id === action.payload.data.id ? action.payload.data : todo
             )
-          : [...state.todos],
+          : state.todos,
         error: action.payload.error,
         isApiProcessing: false,
       };
@@ -56,7 +56,7 @@ const todoReducer = (state, action) => {
       return {
         ...state,
         todos: action.payload.error
-          ? [...state.todos]
+          ? state.todos
           : state.todos.filter((todo) => todo.id !== action.payload.id),
         error: action.payload.error,
         isApiProcessing: false,

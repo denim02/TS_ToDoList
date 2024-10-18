@@ -11,13 +11,7 @@ const EditableTextbox = forwardRef(function EditableTextbox(
   useImperativeHandle(outerRef, () => textAreaRef.current, []);
 
   const adjustHeight = () => {
-    textAreaRef.current.style.height = "inherit";
     textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
-  };
-
-  const handleTextboxChange = (event) => {
-    if (shouldAutoresize) adjustHeight();
-    handleChange(event);
   };
 
   useEffect(() => {
@@ -32,7 +26,7 @@ const EditableTextbox = forwardRef(function EditableTextbox(
       name={name}
       readOnly={!isEditable}
       value={value}
-      onChange={handleTextboxChange}
+      onChange={handleChange}
       ref={textAreaRef}
       {...otherProps}
     ></textarea>

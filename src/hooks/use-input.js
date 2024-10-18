@@ -5,19 +5,19 @@ export const useInput = (defaultValue = "") => {
   const [inputState, setInputState] = useState(defaultValue);
 
   const handleChange = useCallback(() => {
-    if (!inputRef) throw new Error("Set input ref!");
+    if (!inputRef.current) throw new Error("Set input ref!");
 
     setInputState(inputRef.current.value);
   }, []);
 
   const focusInput = useCallback(() => {
-    if (!inputRef) throw new Error("Set input ref!");
+    if (!inputRef.current) throw new Error("Set input ref!");
 
     inputRef.current.focus();
   }, []);
 
   const clearInput = useCallback(() => {
-    if (!inputRef) throw new Error("Set input ref!");
+    if (!inputRef.current) throw new Error("Set input ref!");
 
     setInputState("");
   }, []);

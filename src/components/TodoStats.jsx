@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import { memo } from "react";
 
 const TodoStats = ({ completed, remaining }) => {
-  console.log("test");
   return (
     <div className="todo-stats">
       <h4>Completed: {completed}</h4>
