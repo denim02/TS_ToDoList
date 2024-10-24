@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const Button = ({ label, handleClick, ...rest }) => {
+const Button = ({ label, children, handleClick, ...rest }) => {
   const { className, type, ...otherProps } = rest;
 
   const renderedClassName = `${
@@ -18,13 +18,14 @@ const Button = ({ label, handleClick, ...rest }) => {
       className={renderedClassName}
       {...otherProps}
     >
-      {label}
+      {label || children}
     </button>
   );
 };
 
 Button.propTypes = {
   label: PropTypes.string.isRequired,
+  children: PropTypes.node,
   handleClick: PropTypes.func,
 };
 

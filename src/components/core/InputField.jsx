@@ -5,14 +5,9 @@ const InputField = React.forwardRef(function InputField(
   { name, value, defaultValue, label, handleChange, id, ...rest },
   ref
 ) {
-  const { error, ...inputProps } = rest;
-
   return (
-    <div className="space-y-2">
-      <label
-        className="block text-sm font-medium text-gray-700"
-        htmlFor={id ?? name}
-      >
+    <div className="flex-1 space-y-2 grid grid-cols-1">
+      <label className="text-sm font-medium text-gray-700" htmlFor={id ?? name}>
         {label}
       </label>
       <input
@@ -23,9 +18,8 @@ const InputField = React.forwardRef(function InputField(
         onChange={handleChange}
         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         ref={ref}
-        {...inputProps}
+        {...rest}
       />
-      {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>
   );
 });
