@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import AddTodoForm from "./AddTodoForm";
 import useTodos from "../../hooks/use-todos";
+import TodoForm from "../../components/common/TodoForm";
 
 const CreatePage = () => {
   const { addTodo } = useTodos();
@@ -14,7 +14,7 @@ const CreatePage = () => {
   return (
     <div className="max-w-2xl mx-auto">
       <h1 className="text-3xl font-bold mb-8 text-gray-900">Create New Todo</h1>
-      <AddTodoForm handleSubmit={handleSubmit} />
+      <TodoForm handleSubmit={handleSubmit} />
     </div>
   );
 };
