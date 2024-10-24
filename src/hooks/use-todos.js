@@ -76,6 +76,16 @@ const useTodos = () => {
     dispatch({ type: ACTION_TYPE.SET_TODOS, payload: apiResponse });
   }, [api]);
 
+  const fetchTodo = useCallback(
+    async (id) => {
+      dispatch({ type: ACTION_TYPE.TOGGLE_API_LOADING });
+      const apiResponse = await api.get(`/${id}`);
+      dispatch({ type: ACTION_TYPE.TOGGLE_API_LOADING });
+      return apiResponse.error ? null : apiResponse.data;
+    },
+    [api]
+  );
+
   const createTodo = useCallback(
     async (title, description) => {
       dispatch({ type: ACTION_TYPE.TOGGLE_API_LOADING });
@@ -120,6 +130,7 @@ const useTodos = () => {
 
   return {
     ...state,
+    fetchTodo,
     fetchTodos,
     addTodo: createTodo,
     updateTodo,
