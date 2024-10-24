@@ -1,5 +1,7 @@
+import { Check, Pencil, Trash2 } from "lucide-react";
 import PropTypes from "prop-types";
 import { memo } from "react";
+import { Link } from "react-router-dom";
 
 const TodoItem = ({ todo, handleToggleCompleted }) => {
   return (
