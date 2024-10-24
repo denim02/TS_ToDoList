@@ -66,7 +66,7 @@ const todoReducer = (state, action) => {
   }
 };
 
-export const useTodos = () => {
+const useTodos = () => {
   const [state, dispatch] = useReducer(todoReducer, INITIAL_VALUES);
   const api = useApi(API_URL);
 
@@ -127,3 +127,5 @@ export const useTodos = () => {
     todoStats,
   };
 };
+
+export default useTodos;

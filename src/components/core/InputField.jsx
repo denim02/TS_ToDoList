@@ -5,17 +5,26 @@ const InputField = React.forwardRef(function InputField(
   { name, value, label, handleChange, id, ...rest },
   ref
 ) {
+  const { error, ...inputProps } = rest;
+
   return (
-    <div className="input-field">
-      <label htmlFor={name}>{label}</label>
+    <div className="space-y-2">
+      <label
+        className="block text-sm font-medium text-gray-700"
+        htmlFor={id ?? name}
+      >
+        {label}
+      </label>
       <input
         name={name}
         id={id ?? name}
         value={value}
         onChange={handleChange}
+        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         ref={ref}
-        {...rest}
+        {...inputProps}
       />
+      {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>
   );
 });
